@@ -1,9 +1,9 @@
-const apiBaseUrl = 'http://localhost:8000/tasks/';  // Alterar para o endpoint correto da sua API
+const apiBaseUrl = 'http://localhost:8000/tasks';  // Alterar para o endpoint correto da sua API
 
 // Função para listar todas as tarefas
 function getTasks() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', apiBaseUrl, true);
+    xhr.open('GET',`${apiBaseUrl}/`, true);
     xhr.onload = function() {
         if (xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
@@ -17,7 +17,7 @@ function getTasks() {
                     <span class="${task.status ? 'completa' : ''}">${task.title}</span>
                     <div class="task-actions">
                         <button onclick="toggleTask(${task.id}, ${task.status})">
-                            ${task.status ? 'Pendente' : 'Completa'}
+                            ${task.status ? 'Completa' : 'Pendente'}
                         </button>
                         <button onclick="deleteTask(${task.id})">Deletar</button>
                     </div>
@@ -44,7 +44,7 @@ function addTask() {
     }
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', apiBaseUrl, true);
+    xhr.open('POST', `${apiBaseUrl}/`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
         if (xhr.status === 201) {
@@ -57,13 +57,13 @@ function addTask() {
     xhr.onerror = function() {
         console.error('Request failed');
     };
-    xhr.send(JSON.stringify({ title: taskName, description: 'test', status: false }));
+    xhr.send(JSON.stringify({ title: taskName, description: 'test', status: false}));
 }
 
 // Função para alternar o status da tarefa (completa ou não)
 function toggleTask(taskId, currentStatus) {
     const xhr = new XMLHttpRequest();
-    xhr.open('PATCH', `${apiBaseUrl}/${taskId}`, true);
+    xhr.open('PUT', `${apiBaseUrl}/${taskId}`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
         if (xhr.status === 200) {
@@ -75,7 +75,7 @@ function toggleTask(taskId, currentStatus) {
     xhr.onerror = function() {
         console.error('Request failed');
     };
-    xhr.send(JSON.stringify({ completed: !currentStatus }));
+    xhr.send(JSON.stringify({ status: !currentStatus }));
 }
 
 // Função para remover uma tarefa
